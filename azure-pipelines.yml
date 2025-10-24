@@ -26,3 +26,11 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'LZ-PREMI0576824 - C&CA Belgium'
+    appType: 'webAppLinux'
+    appName: 'app-dllpoc'
+    package: '$(System.DefaultWorkingDirectory)/**/target/*.jar'
+    runtimeStack: 'JAVA|21-java21'
