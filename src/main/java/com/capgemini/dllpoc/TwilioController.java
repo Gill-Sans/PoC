@@ -46,7 +46,7 @@ public class TwilioController {
 
 	/** Utility method to create a Say verb with a consistent voice. */
 	private Say buildSay(String message) {
-		return new Say.Builder(message).voice(Voice.POLLY_CELINE).language(Language.FR_FR).build();
+		return new Say.Builder(message).voice(Voice.POLLY_LEA).language(Language.FR_FR).build();
 	}
 
 	@GetMapping("/token")
