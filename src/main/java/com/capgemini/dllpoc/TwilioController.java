@@ -19,6 +19,7 @@ import com.twilio.jwt.accesstoken.VoiceGrant;
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Say;
+import com.twilio.twiml.voice.Say.Language;
 import com.twilio.twiml.voice.Say.Voice;
 
 @RestController
@@ -45,7 +46,7 @@ public class TwilioController {
 
 	/** Utility method to create a Say verb with a consistent voice. */
 	private Say buildSay(String message) {
-		return new Say.Builder(message).voice(Voice.POLLY_AMY).build();
+		return new Say.Builder(message).voice(Voice.POLLY_LEA).language(Language.FR_FR).build();
 	}
 
 	@GetMapping("/token")
@@ -73,7 +74,8 @@ public class TwilioController {
 
 		logger.info("Received incoming call: SID={}, Caller={}", callSid, caller);
 
-		VoiceResponse twiml = new VoiceResponse.Builder().say(buildSay("Hello, World!"))
+		VoiceResponse twiml = new VoiceResponse.Builder().say(buildSay(
+				"Salut ! Vous êtes en communication avec le Centre de Commande du Service Desk Galactique. Tous nos techniciens sont en orbite autour d’incidents critiques. Transmettez votre message après le bip : nom, unité, et description de l’anomalie. Nous reviendrons vers vous à la vitesse de la lumière !"))
 				.hangup(new Hangup.Builder().build()).build();
 
 		return ResponseEntity.ok(twiml.toXml());
