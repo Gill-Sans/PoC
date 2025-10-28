@@ -1,6 +1,6 @@
 package com.capgemini.dllpoc.config.security;
 
-import com.capgemini.dllpoc.config.properties.CorsPropertiesConfig;
+import com.capgemini.dllpoc.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,12 +22,12 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @Slf4j
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final CorsPropertiesConfig corsProperties;
+    private final CorsProperties corsProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

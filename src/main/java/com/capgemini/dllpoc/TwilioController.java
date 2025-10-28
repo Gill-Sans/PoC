@@ -1,5 +1,6 @@
 package com.capgemini.dllpoc;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -60,7 +61,8 @@ public class TwilioController {
 		VoiceGrant grant = new VoiceGrant();
 		grant.setOutgoingApplicationSid(appSid);
 
-		AccessToken token = new AccessToken.Builder(accountSid, apiKey, apiSecret).identity(identity).grant(grant)
+        byte[] secretBytes = apiSecret.getBytes(StandardCharsets.UTF_8);
+		AccessToken token = new AccessToken.Builder(accountSid, apiKey, secretBytes).identity(identity).grant(grant)
 				.build();
 
 		logger.info("Generated Twilio access token for identity: {}", identity);

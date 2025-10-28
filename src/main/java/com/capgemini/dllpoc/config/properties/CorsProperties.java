@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "cors")
-public class CorsPropertiesConfig {
+public class CorsProperties {
     @NotNull
     private String[] allowedOrigins;
 

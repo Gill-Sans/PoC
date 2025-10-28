@@ -1,6 +1,14 @@
 spring:
   application:
     name: dllpoc
+twilio:
+  account:
+    sid: ${TWILIO_ACCOUNT_SID}
+  api:
+    key: ${TWILIO_API_KEY}
+    secret: ${TWILIO_API_SECRET}
+  app:
+    sid: ${TWILIO_APP_SID}
 cors:
   allowed-headers: ["*"]
   allowed-methods: ["*"]
