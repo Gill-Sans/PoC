@@ -1,85 +1,195 @@
 package com.capgemini.dllpoc;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-
+import com.twilio.http.HttpMethod;
+import com.twilio.twiml.VoiceResponse;
+import com.twilio.twiml.voice.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.twilio.jwt.accesstoken.AccessToken;
-import com.twilio.jwt.accesstoken.VoiceGrant;
-import com.twilio.twiml.VoiceResponse;
-import com.twilio.twiml.voice.Hangup;
-import com.twilio.twiml.voice.Say;
-import com.twilio.twiml.voice.Say.Language;
-import com.twilio.twiml.voice.Say.Voice;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/twilio")
 public class TwilioController {
 
-	private static final Logger logger = LoggerFactory.getLogger(TwilioController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TwilioController.class);
 
-	private final String accountSid;
-	private final String apiKey;
-	private final String apiSecret;
-	private final String appSid;
+    @Value("${twilio.account.sid}")
+    private String accountSid;
 
-	public TwilioController(@Value("${twilio.account.sid}") String accountSid,
-			@Value("${twilio.api.key}") String apiKey, @Value("${twilio.api.secret}") String apiSecret,
-			@Value("${twilio.app.sid}") String appSid) {
+    @Value("${twilio.auth.token}")
+    private String authToken;
 
-		this.accountSid = accountSid;
-		this.apiKey = apiKey;
-		this.apiSecret = apiSecret;
-		this.appSid = appSid;
-	}
+    private final CallDataService dataService;
 
-	/** Utility method to create a Say verb with a consistent voice. */
-	private Say buildSay(String message) {
-		return new Say.Builder(message).voice(Voice.POLLY_LEA).language(Language.FR_FR).build();
-	}
+    // === Simple in-memory store for active calls ===
+    private static final Map<String, CallData> callDataMap = new ConcurrentHashMap<>();
 
-	@GetMapping("/token")
-	public ResponseEntity<Map<String, String>> generateToken(@RequestParam(defaultValue = "web-user") String identity) {
+    public TwilioController(CallDataService dataService) {
+        this.dataService = dataService;
+    }
 
-		if (accountSid == null || apiKey == null || apiSecret == null || appSid == null) {
-			logger.error("Twilio credentials are not properly configured.");
-			return ResponseEntity.internalServerError().body(Map.of("error", "Twilio configuration missing"));
-		}
+    // Simple record to hold user data for now
+    public static class CallData {
+        public String lang;
+        public String accountNumber;
+        public String name;
 
-		VoiceGrant grant = new VoiceGrant();
-		grant.setOutgoingApplicationSid(appSid);
+        public CallData(String lang) {
+            this.lang = lang;
+        }
 
-        byte[] secretBytes = apiSecret.getBytes(StandardCharsets.UTF_8);
-		AccessToken token = new AccessToken.Builder(accountSid, apiKey, secretBytes).identity(identity).grant(grant)
-				.build();
+        @Override
+        public String toString() {
+            return "CallData{" +
+                    "lang='" + lang + '\'' +
+                    ", accountNumber='" + accountNumber + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
+    }
 
-		logger.info("Generated Twilio access token for identity: {}", identity);
+    private Say say(String text, Say.Language lang) {
+        return new Say.Builder(text)
+                .voice(Say.Voice.POLLY_AMY)
+                .language(lang)
+                .build();
+    }
 
-		return ResponseEntity.ok(Map.of("token", token.toJwt()));
-	}
+    // === 1️⃣ Incoming call ===
+    @PostMapping(value = "/voice", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> handleIncomingCall(@RequestParam("CallSid") String callSid) {
+        callSid = callSid.split(",")[0];
+        logger.info("Incoming call: {}", callSid);
 
-	@PostMapping(value = "/hello", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> handleIncomingCall(@RequestParam("CallSid") String callSid,
-			@RequestParam("Caller") String caller) {
+        // Create a blank CallData entry early
+        callDataMap.put(callSid, new CallData("en"));
 
-		logger.info("Received incoming call: SID={}, Caller={}", callSid, caller);
+        Gather gather = new Gather.Builder()
+                .numDigits(1)
+                .action("/twilio/language")
+                .method(HttpMethod.POST)
+                .say(new Say.Builder("For English, press 1. Voor Nederlands, druk op 2.")
+                        .language(Say.Language.EN_GB)
+                        .voice(Say.Voice.POLLY_AMY)
+                        .build())
+                .build();
 
-		VoiceResponse twiml = new VoiceResponse.Builder().say(buildSay(
-				"Salut ! Vous êtes en communication avec le Centre de Commande du Service Desk Galactique. Tous nos techniciens sont en orbite autour d’incidents critiques. Transmettez votre message après le bip : nom, unité, et description de l’anomalie. Nous reviendrons vers vous à la vitesse de la lumière !"))
-				.hangup(new Hangup.Builder().build()).build();
+        VoiceResponse response = new VoiceResponse.Builder()
+                .gather(gather)
+                .say(new Say.Builder("We did not receive any input. Goodbye!")
+                        .language(Say.Language.EN_GB)
+                        .build())
+                .build();
 
-		return ResponseEntity.ok(twiml.toXml());
-	}
+        return ResponseEntity.ok(response.toXml());
+    }
+
+    // === 2️⃣ Handle language selection ===
+    @PostMapping(value = "/language", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> handleLanguage(@RequestParam("Digits") String digits,
+                                                 @RequestParam("CallSid") String callSid) {
+        callSid = callSid.split(",")[0];
+        logger.info("Language selected: {} for CallSid {}", digits, callSid);
+
+        String lang = digits.equals("2") ? "nl" : "en";
+        callDataMap.computeIfAbsent(callSid, k -> new CallData(lang)).lang = lang;
+
+        String nextUrl = "/twilio/account?lang=" + lang;
+
+        VoiceResponse response = new VoiceResponse.Builder()
+                .redirect(new Redirect.Builder(nextUrl).build())
+                .build();
+
+        return ResponseEntity.ok(response.toXml());
+    }
+
+    // === 3️⃣ Ask for store account number ===
+    @PostMapping(value = "/account", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> askAccount(@RequestParam("lang") String lang,
+                                             @RequestParam("CallSid") String callSid) {
+        callSid = callSid.split(",")[0];
+        Say.Language language = lang.equals("nl") ? Say.Language.NL_NL : Say.Language.EN_GB;
+        String message = lang.equals("nl")
+                ? "Voer uw winkelrekeningnummer in, gevolgd door een hekje."
+                : "Please enter your store account number, followed by the pound key.";
+
+        Gather gather = new Gather.Builder()
+                .finishOnKey("#")
+                .action("/twilio/name?lang=" + lang)
+                .method(HttpMethod.POST)
+                .say(say(message, language))
+                .build();
+
+        VoiceResponse response = new VoiceResponse.Builder()
+                .gather(gather)
+                .build();
+
+        return ResponseEntity.ok(response.toXml());
+    }
+
+    // === 4️⃣ Ask for name (speech input) ===
+    @PostMapping(value = "/name", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> askName(@RequestParam("lang") String lang,
+                                          @RequestParam("CallSid") String callSid,
+                                          @RequestParam(value = "Digits", required = false) String accountNumber) {
+        callSid = callSid.split(",")[0];
+        logger.info("Account number for {}: {}", callSid, accountNumber);
+
+        // Save account number
+        callDataMap.computeIfAbsent(callSid, k -> new CallData(lang)).accountNumber = accountNumber;
+
+        String baseUrl = "https://salma-enjambed-unmenially.ngrok-free.dev";
+        Say.Language language = lang.equals("nl") ? Say.Language.NL_NL : Say.Language.EN_GB;
+        String message = lang.equals("nl")
+                ? "Zeg alstublieft uw naam na de pieptoon."
+                : "Please say your name after the beep.";
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<Response>\n" +
+                "  <Gather input=\"speech\" timeout=\"5\" speechTimeout=\"auto\" " +
+                "action=\"" + baseUrl + "/twilio/thanks?lang=" + lang + "\" method=\"POST\">\n" +
+                "    <Say language=\"" + (lang.equals("nl") ? "nl-NL" : "en-GB") + "\">" + message + "</Say>\n" +
+                "  </Gather>\n" +
+                "  <Say language=\"" + (lang.equals("nl") ? "nl-NL" : "en-GB") + "\">We did not receive your name. Goodbye!</Say>\n" +
+                "</Response>";
+
+        return ResponseEntity.ok(xml);
+    }
+
+    // === 5️⃣ Thank and hang up ===
+    @PostMapping(value = "/thanks", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> thankUser(@RequestParam("lang") String lang,
+                                            @RequestParam("CallSid") String callSid,
+                                            @RequestParam(value = "SpeechResult", required = false) String name) {
+        callSid = callSid.split(",")[0];
+        logger.info("Name received for {}: {}", callSid, name);
+
+        // Save name
+        callDataMap.computeIfAbsent(callSid, k -> new CallData(lang)).name = name;
+
+        CallData data = callDataMap.get(callSid);
+        logger.info("✅ Full call data for {}: {}", callSid, data);
+
+        dataService.handleCompletedCall(callSid, data);
+
+        Say.Language language = lang.equals("nl") ? Say.Language.NL_NL : Say.Language.EN_GB;
+        String message = lang.equals("nl")
+                ? "Bedankt " + (name != null ? name : "") + ". Tot ziens!"
+                : "Thank you " + (name != null ? name : "") + ". Goodbye!";
+
+        VoiceResponse response = new VoiceResponse.Builder()
+                .say(say(message, language))
+                .hangup(new Hangup.Builder().build())
+                .build();
+
+        logger.info("Current call data map: {}", callDataMap);
+        return ResponseEntity.ok(response.toXml());
+    }
 }

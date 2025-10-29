@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                                 "/actuator/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/api/**"
+                                "/**"
                         ).permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
