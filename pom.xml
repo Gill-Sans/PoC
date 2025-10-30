@@ -10,6 +10,7 @@
         <postgresql.version>42.7.8</postgresql.version>
         <lombok.version>1.18.42</lombok.version>
         <twilio.version>11.0.1</twilio.version>
+        <h2.version>2.4.240</h2.version>
     </properties>
 
 	<parent>
@@ -86,6 +87,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>${h2.version}</version>
         </dependency>
     </dependencies>
 
