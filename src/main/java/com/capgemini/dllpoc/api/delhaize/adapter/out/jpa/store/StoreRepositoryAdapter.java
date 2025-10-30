@@ -1,7 +1,7 @@
-package com.capgemini.dllpoc.api.delhaize.adapter.out.jpa;
+package com.capgemini.dllpoc.api.delhaize.adapter.out.jpa.store;
 
 import com.capgemini.dllpoc.api.delhaize.model.Store;
-import com.capgemini.dllpoc.api.delhaize.port.out.StoreRepositoryPort;
+import com.capgemini.dllpoc.api.delhaize.port.out.store.StoreRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

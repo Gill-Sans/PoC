@@ -1,4 +1,4 @@
-package com.capgemini.dllpoc.api.delhaize.adapter.out.jpa;
+package com.capgemini.dllpoc.api.delhaize.adapter.out.jpa.store;
 
 import com.capgemini.dllpoc.api.delhaize.model.Store;
 import java.util.Optional;
