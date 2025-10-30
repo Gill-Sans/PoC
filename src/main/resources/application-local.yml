@@ -1,6 +1,13 @@
 spring:
   application:
     name: dllpoc
+  ai:
+    azure:
+      openai:
+        endpoint: https://premi0576824.openai.azure.com/
+        api-key: ${AZURE_OPENAI_API_KEY}
+        chat:
+          deployment-name: gpt-5
 twilio:
   account:
     sid: ${TWILIO_ACCOUNT_SID}
