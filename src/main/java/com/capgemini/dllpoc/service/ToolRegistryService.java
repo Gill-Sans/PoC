@@ -9,13 +9,13 @@ import java.util.Map;
 @Component
 public class ToolRegistryService {
 
-    private final PromoService promoService;
+    private final MockPromoService mockPromoService;
     private final ItemScanService itemScanService;
 
     private final Map<String, Method> toolMap = new HashMap<>();
 
-    public ToolRegistryService(PromoService promoService, ItemScanService itemScanService) {
-        this.promoService = promoService;
+    public ToolRegistryService(MockPromoService mockPromoService, ItemScanService itemScanService) {
+        this.mockPromoService = mockPromoService;
         this.itemScanService = itemScanService;
         registerTools();
     }
@@ -55,7 +55,7 @@ public class ToolRegistryService {
 
     @Tool(name = "promo_service", description = "Handles promotion updates in the database.")
     public String updatePromo(String input) {
-        return promoService.handlePromoUpdate(input);
+        return mockPromoService.handlePromoUpdate(input);
     }
 
     @Tool(name = "item_scan_issue", description = "Creates a ticket for service central if an item is not scannable.")

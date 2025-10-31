@@ -31,6 +31,8 @@ If `.env.example` is not present, create a file named `.env` in the project root
   - `TWILIO_API_KEY`
   - `TWILIO_API_SECRET`
   - `TWILIO_APP_SID`
+  - `AZURE_OPENAI_API_KEY`
+  - `APP_BASE_URL` - Base URL where the application will be hosted (e.g. `https://your-app-base-url.com`)
 
 #### Sample `.env` / `.env.example`
 
@@ -43,6 +45,8 @@ TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_API_KEY=SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_API_SECRET=your_twilio_api_secret
 TWILIO_APP_SID=APxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AZURE_OPENAI_API_KEY=5dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+APP_BASE_URL=https://your-app-base-url.com
 ```
 
 ### 2) Database setup
