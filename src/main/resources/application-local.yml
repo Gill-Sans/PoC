@@ -8,6 +8,17 @@ spring:
         api-key: ${AZURE_OPENAI_API_KEY}
         chat:
           deployment-name: gpt-5
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
 twilio:
   account:
     sid: ${TWILIO_ACCOUNT_SID}
