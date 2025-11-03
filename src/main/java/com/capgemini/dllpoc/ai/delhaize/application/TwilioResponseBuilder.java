@@ -1,8 +1,10 @@
-package com.capgemini.dllpoc.twilio.application;
+package com.capgemini.dllpoc.ai.delhaize.application;
 
-import com.capgemini.dllpoc.twilio.ports.in.TwilioResponseBuilderUseCase;
+import com.capgemini.dllpoc.twilio.delhaize.ports.TwilioResponseBuilderUseCase;
 import com.twilio.twiml.VoiceResponse;
-import com.twilio.twiml.voice.*;
+import com.twilio.twiml.voice.Hangup;
+import com.twilio.twiml.voice.Redirect;
+import com.twilio.twiml.voice.Say;
 import org.springframework.stereotype.Service;
 
 @Service

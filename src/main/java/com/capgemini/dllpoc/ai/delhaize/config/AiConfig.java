@@ -1,4 +1,4 @@
-package com.capgemini.dllpoc;
+package com.capgemini.dllpoc.ai.delhaize.config;
 
 import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
 import org.springframework.ai.chat.client.ChatClient;

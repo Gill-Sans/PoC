@@ -90,3 +90,37 @@ From the project root run the following commands:
 .\mvnw.cmd clean package
 .\mvnw.cmd spring-boot:run -Dspring.profiles.active=local
 ```
+
+
+src/main/java/com/capgemini/dllpoc/
+│
+├── ai/
+│   └── delhaize/
+│       ├── agent/                  # AI agent logic and orchestration
+│           ├── CallFlowAgent
+│       ├── application/           # Application layer for AI use cases
+│           ├── ToolLoaderService
+│       ├── config/                # Configuration files and setup
+│       ├── model/                 # Domain models used by AI components
+│       ├── prompt/                # Prompt templates and logic for LLM interactions
+│       └── tools/                 # Modular tools used by the AI agent
+│           ├── AskAccountTool/       # Tool to ask for account information
+│           ├── AskLanguageTool/      # Tool to ask for preferred language
+│           ├── AskNameTool/          # Tool to ask for user's name
+│           ├── AskProblemTool/       # Tool to ask about the user's issue
+│           ├── ConfirmDetailsTool/   # Tool to confirm collected details
+│           └── ThankUserTool/        # Tool to thank the user
+│
+├── api/
+│   └── delhaize/
+│           ├── adapter/              # Adapters for external API integration
+│           ├── application/         # Application layer for API logic
+│           ├── model/               # Data models used in API communication
+│           └── port/                # Interfaces and ports for API services
+│
+└── twilio/
+│       ├── delhaize/
+│           ├── adapter/             # Twilio-specific adapters
+│           ├── application/        # Application logic for Twilio integration
+│           ├── ports/
+└── DllpocApplication
