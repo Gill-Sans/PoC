@@ -1,4 +1,4 @@
-package com.capgemini.dllpoc.ai.delhaize.application;
+package com.capgemini.dllpoc.twilio.delhaize.application;
 
 import com.capgemini.dllpoc.twilio.delhaize.ports.TwilioResponseBuilderUseCase;
 import com.twilio.twiml.VoiceResponse;

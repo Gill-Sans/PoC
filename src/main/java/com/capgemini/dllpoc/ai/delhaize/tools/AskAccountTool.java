@@ -1,0 +1,47 @@
+package com.capgemini.dllpoc.ai.delhaize.tools;
+
+import com.capgemini.dllpoc.twilio.delhaize.application.TwilioResponseBuilder;
+import com.twilio.twiml.voice.Say;
+import org.springframework.ai.tool.annotation.Tool;
+
+public class AskAccountTool {
+
+    private final TwilioResponseBuilder twilioResponseBuilder;
+
+    public AskAccountTool(TwilioResponseBuilder twilioResponseBuilder) {
+        this.twilioResponseBuilder = twilioResponseBuilder;
+    }
+
+    @Tool(description = "Returns Twilio XML to ask user to enter account number using DTMF. Use after name collected. Returns XML directly.")
+    public String askAccount(String language) {
+        String message = getAccountPrompt(language);
+        String actionUrl = "/twilio/process?lang=" + language;
+        Say.Language sayLanguage = getSayLanguage(language);
+
+        return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, false);
+    }
+
+    private String getAccountPrompt(String language) {
+        if (language == null) {
+            return "Please enter your store account number, followed by the pound key.";
+        }
+
+        return switch (language.toLowerCase()) {
+            case "nl", "dutch" -> "Voer uw winkelrekeningnummer in, gevolgd door een hekje.";
+            case "fr", "french" -> "Veuillez entrer votre numéro de compte magasin, suivi de la touche dièse.";
+            default -> "Please enter your store account number, followed by the pound key.";
+        };
+    }
+
+    private Say.Language getSayLanguage(String language) {
+        if (language == null) {
+            return Say.Language.EN_US;
+        }
+
+        return switch (language.toLowerCase()) {
+            case "nl", "dutch" -> Say.Language.NL_NL;
+            case "fr", "french" -> Say.Language.FR_FR;
+            default -> Say.Language.EN_US;
+        };
+    }
+}

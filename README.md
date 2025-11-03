@@ -96,10 +96,12 @@ src/main/java/com/capgemini/dllpoc/
 │
 ├── ai/
 │   └── delhaize/
-│       ├── agent/                  # AI agent logic and orchestration
-│           ├── CallFlowAgent
 │       ├── application/           # Application layer for AI use cases
-│           ├── ToolLoaderService
+│           ├── AgentService                  # Central service coordinating agent behavior and use cases
+│           ├── CallFlowAgent                 # Manages call flow logic (e.g., IVR steps, routing decisions)
+│           ├── ConversationAgent             # Handles conversational context, state, and transitions
+│           ├── SessionService                # Manages session lifecycle, persistence, and context recovery
+│           ├── TwilioResponseBuilder         # Builds structured Twilio-compatible responses (Spring AI-Tools)
 │       ├── config/                # Configuration files and setup
 │       ├── model/                 # Domain models used by AI components
 │       ├── prompt/                # Prompt templates and logic for LLM interactions

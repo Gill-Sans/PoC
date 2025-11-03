@@ -7,10 +7,10 @@ import java.util.Map;
 @Service
 public class CallFlowAgent {
 
-    private final ConversationAgent conversationAgent;
+    private final AgentService conversationAgent;
     private final SessionService sessionService;
 
-    public CallFlowAgent(ConversationAgent conversationAgent, SessionService sessionService) {
+    public CallFlowAgent(AgentService conversationAgent, SessionService sessionService) {
         this.conversationAgent = conversationAgent;
         this.sessionService = sessionService;
     }

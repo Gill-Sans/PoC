@@ -44,12 +44,6 @@ public class TwilioController {
         return ResponseEntity.ok(xml);
     }
 
-    @PostMapping(value = "/talk/{sessionId}", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> talkWithSession(@PathVariable String sessionId, @RequestBody TalkRequest request) {
-        String xml = callFlowAgent.talkWithSession(sessionId, request.input());
-        return ResponseEntity.ok(xml);
-    }
-
     @DeleteMapping(value = "/session/{sessionId}")
     public ResponseEntity<Void> clearSession(@PathVariable String sessionId) {
         callFlowAgent.clearConversation(sessionId);
