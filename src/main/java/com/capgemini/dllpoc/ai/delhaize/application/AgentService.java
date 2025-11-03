@@ -23,11 +23,7 @@ public class AgentService {
             You must call the appropriate tool and return ONLY its XML result.
             Do not add any text before or after the tool result.
             Do not explain what you did.
-            Just return the raw XML from the tool.
-            
-            For language selection: call askLanguage()
-            For name input: call askName(language)  
-            For account input: call askAccount(language)
+            Just return the raw XML from the tool
             """;
 
         String result = chatClient.prompt()
