@@ -111,7 +111,8 @@ src/main/java/com/capgemini/dllpoc/
 │           ├── AskNameTool/          # Tool to ask for user's name
 │           ├── AskProblemTool/       # Tool to ask about the user's issue
 │           ├── ConfirmDetailsTool/   # Tool to confirm collected details
-│           └── ThankUserTool/        # Tool to thank the user
+│           ├── TranscriptionTool/    # Tool to transcribe Twilio audio and convert to selected language
+│           └── HangupTool/           # Tool to thank the user
 │
 ├── api/
 │   └── delhaize/
