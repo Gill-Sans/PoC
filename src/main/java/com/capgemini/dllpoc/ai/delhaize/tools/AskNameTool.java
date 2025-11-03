@@ -16,7 +16,7 @@ public class AskNameTool {
     public String askName(String language) {
         String message = getNamePrompt(language);
         String actionUrl = "/twilio/process?lang=" + language;
-        Say.Language sayLanguage = getSayLanguage(language);
+        Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
         return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, true);
     }
@@ -30,18 +30,6 @@ public class AskNameTool {
             case "nl", "dutch" -> "Zeg alstublieft uw naam.";
             case "fr", "french" -> "Veuillez dire votre nom.";
             default -> "Please say your name.";
-        };
-    }
-
-    private Say.Language getSayLanguage(String language) {
-        if (language == null) {
-            return Say.Language.EN_US;
-        }
-
-        return switch (language.toLowerCase()) {
-            case "nl", "dutch" -> Say.Language.NL_NL;
-            case "fr", "french" -> Say.Language.FR_FR;
-            default -> Say.Language.EN_US;
         };
     }
 }

@@ -16,7 +16,7 @@ public class AskAccountTool {
     public String askAccount(String language) {
         String message = getAccountPrompt(language);
         String actionUrl = "/twilio/process?lang=" + language;
-        Say.Language sayLanguage = getSayLanguage(language);
+        Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
         return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, false);
     }
@@ -30,18 +30,6 @@ public class AskAccountTool {
             case "nl", "dutch" -> "Voer uw winkelrekeningnummer in, gevolgd door een hekje.";
             case "fr", "french" -> "Veuillez entrer votre numéro de compte magasin, suivi de la touche dièse.";
             default -> "Please enter your store account number, followed by the pound key.";
-        };
-    }
-
-    private Say.Language getSayLanguage(String language) {
-        if (language == null) {
-            return Say.Language.EN_US;
-        }
-
-        return switch (language.toLowerCase()) {
-            case "nl", "dutch" -> Say.Language.NL_NL;
-            case "fr", "french" -> Say.Language.FR_FR;
-            default -> Say.Language.EN_US;
         };
     }
 }

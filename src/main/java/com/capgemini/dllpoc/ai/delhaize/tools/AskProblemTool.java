@@ -15,22 +15,11 @@ public class AskProblemTool {
 
     @Tool(description = "Generates Twilio XML to confirm the user's provided details (name, account number, and problem description) before proceeding to resolve the reported issue. Use this after collecting all necessary information from the user. Returns XML directly")
     public String askProblem(String lang, CallData data) {
-        Say.Language sayLanguage = getSayLanguage(lang);
+        Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(lang);
         String confirmationMessage = getConfirmationMessage(lang, data);
         String actionUrl = "/twilio/process?lang=" + lang;
 
         return twilioResponseBuilder.gatherXml(confirmationMessage, actionUrl, sayLanguage, true);
-    }
-
-    private Say.Language getSayLanguage(String lang) {
-        if (lang == null) {
-            return Say.Language.EN_US;
-        }
-        return switch (lang.toLowerCase()) {
-            case "nl", "dutch" -> Say.Language.NL_NL;
-            case "fr", "french" -> Say.Language.FR_FR;
-            default -> Say.Language.EN_US;
-        };
     }
 
     private String getConfirmationMessage(String lang, CallData data) {

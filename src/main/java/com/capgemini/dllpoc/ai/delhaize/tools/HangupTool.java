@@ -19,7 +19,7 @@ public class HangupTool {
             description = "Generates Twilio XML to gracefully end the call after completing the interaction. Use this as the final step in the voice flow when no further input is required. The response includes a farewell message and a <Hangup> command to terminate the call. Returns XML directly"
     )
     public String hangupTool(String lang, String confirmation, CallData data) {
-        Say.Language language = getSayLanguage(lang);
+        Say.Language language = ToolLanguageUtil.getSayLanguage(lang);
 
         if (confirmation != null && confirmation.toLowerCase().contains("yes")) {
 
@@ -38,20 +38,9 @@ public class HangupTool {
                 ? "Laten we het opnieuw proberen. Beschrijf uw probleem opnieuw."
                 : "Let's try again. Please describe your problem again.");
 
-        String actionUrl = "/twilio/problem?lang=" + lang;
+        String actionUrl = "/twilio/process?lang=" + lang;
 
         return twilioResponseBuilder.gatherXml(retryMessage, actionUrl, language, true);
-    }
-
-    private Say.Language getSayLanguage(String lang) {
-        if (lang == null) {
-            return Say.Language.EN_US;
-        }
-        return switch (lang.toLowerCase()) {
-            case "nl", "dutch" -> Say.Language.NL_NL;
-            case "fr", "french" -> Say.Language.FR_FR;
-            default -> Say.Language.EN_US;
-        };
     }
 
 }
