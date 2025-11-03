@@ -7,6 +7,7 @@ import org.springframework.ai.tool.annotation.Tool;
 public class AskAccountTool {
 
     private final TwilioResponseBuilder twilioResponseBuilder;
+    private static final String ACTION_URL = "/twilio/process?lang=";
 
     public AskAccountTool(TwilioResponseBuilder twilioResponseBuilder) {
         this.twilioResponseBuilder = twilioResponseBuilder;
@@ -15,7 +16,7 @@ public class AskAccountTool {
     @Tool(description = "Returns Twilio XML to ask user to enter account number using DTMF. Use after name collected. Returns XML directly.")
     public String askAccount(String language) {
         String message = getAccountPrompt(language);
-        String actionUrl = "/twilio/process?lang=" + language;
+        String actionUrl = ACTION_URL + language;
         Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
         return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, false);

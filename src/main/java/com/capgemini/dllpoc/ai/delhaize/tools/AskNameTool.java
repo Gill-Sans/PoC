@@ -7,6 +7,7 @@ import org.springframework.ai.tool.annotation.Tool;
 public class AskNameTool {
 
     private final TwilioResponseBuilder twilioResponseBuilder;
+    private static final String ACTION_URL = "/twilio/process?lang=";
 
     public AskNameTool(TwilioResponseBuilder twilioResponseBuilder) {
         this.twilioResponseBuilder = twilioResponseBuilder;
@@ -15,7 +16,7 @@ public class AskNameTool {
     @Tool(description = "Returns Twilio XML to ask user to say their name. Use after language selected. Returns XML directly.")
     public String askName(String language) {
         String message = getNamePrompt(language);
-        String actionUrl = "/twilio/process?lang=" + language;
+        String actionUrl = ACTION_URL + language;
         Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
         return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, true);

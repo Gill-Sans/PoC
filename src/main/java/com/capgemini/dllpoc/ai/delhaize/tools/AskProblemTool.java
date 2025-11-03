@@ -8,6 +8,7 @@ import org.springframework.ai.tool.annotation.Tool;
 public class AskProblemTool {
 
     private final TwilioResponseBuilder twilioResponseBuilder;
+    private static final String ACTION_URL = "/twilio/process?lang=";
 
     public AskProblemTool(TwilioResponseBuilder twilioResponseBuilder) {
         this.twilioResponseBuilder = twilioResponseBuilder;
@@ -17,7 +18,7 @@ public class AskProblemTool {
     public String askProblem(String lang, CallData data) {
         Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(lang);
         String confirmationMessage = getConfirmationMessage(lang, data);
-        String actionUrl = "/twilio/process?lang=" + lang;
+        String actionUrl = ACTION_URL + lang;
 
         return twilioResponseBuilder.gatherXml(confirmationMessage, actionUrl, sayLanguage, true);
     }

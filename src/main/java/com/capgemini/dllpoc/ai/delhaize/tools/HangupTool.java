@@ -10,6 +10,7 @@ import org.springframework.ai.tool.annotation.Tool;
 public class HangupTool {
 
     private final TwilioResponseBuilder twilioResponseBuilder;
+    private static final String ACTION_URL = "/twilio/process?lang=";
 
     public HangupTool(TwilioResponseBuilder twilioResponseBuilder) {
         this.twilioResponseBuilder = twilioResponseBuilder;
@@ -38,7 +39,7 @@ public class HangupTool {
                 ? "Laten we het opnieuw proberen. Beschrijf uw probleem opnieuw."
                 : "Let's try again. Please describe your problem again.");
 
-        String actionUrl = "/twilio/process?lang=" + lang;
+        String actionUrl = ACTION_URL + lang;
 
         return twilioResponseBuilder.gatherXml(retryMessage, actionUrl, language, true);
     }
