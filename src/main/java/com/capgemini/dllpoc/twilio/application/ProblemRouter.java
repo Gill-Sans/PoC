@@ -1,12 +1,13 @@
-package com.capgemini.dllpoc.service;
+package com.capgemini.dllpoc.twilio.application;
 
+import com.capgemini.dllpoc.twilio.ports.in.ProblemRouterUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProblemRouter {
+public class ProblemRouter implements ProblemRouterUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(ProblemRouter.class);
 

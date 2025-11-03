@@ -1,6 +1,7 @@
-package com.capgemini.dllpoc.service;
+package com.capgemini.dllpoc.twilio.application;
 
-import com.capgemini.dllpoc.model.CallData;
+import com.capgemini.dllpoc.twilio.model.CallData;
+import com.capgemini.dllpoc.twilio.ports.in.TwilioCallFlowUseCase;
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Hangup;
 import com.twilio.twiml.voice.Say;
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TwilioCallFlowService {
+public class TwilioCallFlowService implements TwilioCallFlowUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(TwilioCallFlowService.class);
 

@@ -1,14 +1,14 @@
-package com.capgemini.dllpoc.service;
+package com.capgemini.dllpoc.twilio.application;
 
-import com.twilio.http.HttpMethod;
+import com.capgemini.dllpoc.twilio.ports.in.TwilioResponseBuilderUseCase;
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TwilioResponseBuilder {
+public class TwilioResponseBuilder implements TwilioResponseBuilderUseCase {
 
-    private Say say(String text, Say.Language lang) {
+    public Say say(String text, Say.Language lang) {
         return new Say.Builder(text)
                 .voice(Say.Voice.POLLY_AMY)
                 .language(lang)
@@ -17,12 +17,12 @@ public class TwilioResponseBuilder {
 
     public String gatherXml(String message, String actionUrl, Say.Language language, boolean useSpeech) {
         String inputType = useSpeech ? "speech" : "dtmf";
-        String speechTimeout = useSpeech ? " speechTimeout=\"auto\"" : "";
+        String speechTimeout = useSpeech ? " speechTimeout=\"5\"" : "";
         String sayLanguage = language == Say.Language.NL_NL ? "nl-NL" : "en-US";
 
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<Response>\n" +
-                "  <Gather input=\"" + inputType + "\"" + speechTimeout + " timeout=\"5\" method=\"POST\" action=\"" + actionUrl + "\">\n" +
+                "  <Gather speechModel=\"googlev2_telephony\" input=\"" + inputType + "\"" + speechTimeout + " timeout=\"5\" method=\"POST\" action=\"" + actionUrl + "\">\n" +
                 "    <Say language=\"" + sayLanguage + "\">" + message + "</Say>\n" +
                 "  </Gather>\n" +
                 "  <Say language=\"" + sayLanguage + "\">We did not receive your response. Goodbye!</Say>\n" +

@@ -1,7 +1,8 @@
-package com.capgemini.dllpoc.controller;
+package com.capgemini.dllpoc.twilio.adapter.in;
 
-import com.capgemini.dllpoc.model.CallData;
-import com.capgemini.dllpoc.service.*;
+import com.capgemini.dllpoc.twilio.application.CallDataService;
+import com.capgemini.dllpoc.twilio.application.TwilioCallFlowService;
+import com.capgemini.dllpoc.twilio.model.CallData;
 import com.twilio.twiml.VoiceResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

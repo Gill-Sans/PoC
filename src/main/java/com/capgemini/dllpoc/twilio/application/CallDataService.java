@@ -1,13 +1,14 @@
-package com.capgemini.dllpoc.service;
+package com.capgemini.dllpoc.twilio.application;
 
-import com.capgemini.dllpoc.model.CallData;
+import com.capgemini.dllpoc.twilio.model.CallData;
+import com.capgemini.dllpoc.twilio.ports.in.CallDataUseCase;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class CallDataService {
+public class CallDataService implements CallDataUseCase {
     private final Map<String, CallData> callDataMap = new ConcurrentHashMap<>();
 
     public CallData getOrCreate(String callSid, String lang) {

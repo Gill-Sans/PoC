@@ -1,4 +1,4 @@
-package com.capgemini.dllpoc.model;
+package com.capgemini.dllpoc.twilio.model;
 
 public class CallData {
     private String lang;

@@ -1,5 +1,6 @@
-package com.capgemini.dllpoc.service;
+package com.capgemini.dllpoc.twilio.application;
 
+import com.capgemini.dllpoc.twilio.ports.in.ToolRegistryUseCase;
 import org.springframework.stereotype.Component;
 import org.springframework.ai.tool.annotation.Tool;
 import java.lang.reflect.Method;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ToolRegistryService {
+public class ToolRegistryService implements ToolRegistryUseCase {
 
     private final MockPromoService mockPromoService;
     private final ItemScanService itemScanService;
@@ -20,7 +21,7 @@ public class ToolRegistryService {
         registerTools();
     }
 
-    private void registerTools() {
+    public void registerTools() {
         for (Method method : this.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Tool.class)) {
                 Tool tool = method.getAnnotation(Tool.class);
