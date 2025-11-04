@@ -1,5 +1,6 @@
 package com.capgemini.dllpoc.ai.delhaize.tools;
 
+import com.capgemini.dllpoc.config.properties.LanguageProperties;
 import com.capgemini.dllpoc.twilio.delhaize.application.TwilioResponseBuilder;
 import com.twilio.twiml.voice.Say;
 import org.springframework.ai.tool.annotation.Tool;
@@ -7,30 +8,19 @@ import org.springframework.ai.tool.annotation.Tool;
 public class AskNameTool {
 
     private final TwilioResponseBuilder twilioResponseBuilder;
+    private final LanguageProperties languageProperties;
     private static final String ACTION_URL = "/twilio/process?lang=";
 
-    public AskNameTool(TwilioResponseBuilder twilioResponseBuilder) {
+    public AskNameTool(TwilioResponseBuilder twilioResponseBuilder, LanguageProperties languageProperties) {
         this.twilioResponseBuilder = twilioResponseBuilder;
+        this.languageProperties = languageProperties;
     }
 
     @Tool(description = "Returns Twilio XML to ask user to say their name. Use after language selected. Returns XML directly.")
-    public String askName(String language) {
-        String message = getNamePrompt(language);
+    public String askName(Say.Language language) {
+        String message = ToolLanguageUtil.getMessage(languageProperties.getAskName(), language);
         String actionUrl = ACTION_URL + language;
-        Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
-        return twilioResponseBuilder.promptForUserInput(message, actionUrl, sayLanguage, true);
-    }
-
-    private String getNamePrompt(String language) {
-        if (language == null) {
-            return "Please say your name.";
-        }
-
-        return switch (language.toLowerCase()) {
-            case "nl", "dutch" -> "Zeg alstublieft uw naam.";
-            case "fr", "french" -> "Veuillez dire votre nom.";
-            default -> "Please say your name.";
-        };
+        return twilioResponseBuilder.promptForUserInput(message, actionUrl, language, true);
     }
 }

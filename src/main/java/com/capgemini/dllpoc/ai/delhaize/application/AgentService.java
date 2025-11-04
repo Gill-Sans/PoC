@@ -1,6 +1,7 @@
 package com.capgemini.dllpoc.ai.delhaize.application;
 
 import com.capgemini.dllpoc.ai.delhaize.tools.*;
+import com.capgemini.dllpoc.config.properties.LanguageProperties;
 import com.capgemini.dllpoc.twilio.delhaize.application.TwilioResponseBuilder;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -18,20 +19,20 @@ public class AgentService {
     private final ChatMemory chatMemory;
     private final List<Object> tools;
 
-    public AgentService(ChatClient chatClient, ChatMemory chatMemory, TwilioResponseBuilder twilioResponseBuilder) {
+    public AgentService(ChatClient chatClient, ChatMemory chatMemory, TwilioResponseBuilder twilioResponseBuilder, LanguageProperties languageProperties) {
         this.chatClient = chatClient;
         this.chatMemory = chatMemory;
-        this.tools = createTools(twilioResponseBuilder);
+        this.tools = createTools(twilioResponseBuilder, languageProperties);
     }
 
-    private List<Object> createTools(TwilioResponseBuilder twilioResponseBuilder) {
+    private List<Object> createTools(TwilioResponseBuilder twilioResponseBuilder, LanguageProperties languageProperties) {
         return List.of(
                 new AskLanguageTool(twilioResponseBuilder),
-                new AskAccountTool(twilioResponseBuilder),
-                new AskNameTool(twilioResponseBuilder),
-                new AskProblemTool(twilioResponseBuilder),
+                new AskAccountTool(twilioResponseBuilder, languageProperties),
+                new AskNameTool(twilioResponseBuilder, languageProperties),
+                new AskProblemTool(twilioResponseBuilder, languageProperties),
                 new TranscriptionTool(),
-                new HangupTool(twilioResponseBuilder)
+                new HangupTool(twilioResponseBuilder, languageProperties)
         );
     }
 

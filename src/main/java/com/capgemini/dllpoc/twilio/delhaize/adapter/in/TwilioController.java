@@ -22,7 +22,7 @@ public class TwilioController {
         this.sessionService = sessionService;
     }
 
-    @PostMapping(value = "/voice", produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/process", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> handleIncomingCall(@RequestParam Map<String, String> params) {
         String xml = callFlowAgent.process(params);
         return ResponseEntity.ok(xml);

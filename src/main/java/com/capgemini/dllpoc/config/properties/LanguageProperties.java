@@ -37,6 +37,38 @@ public class LanguageProperties {
     private Map<Say.Language, String> timeout = new LinkedHashMap<>();
 
     /**
+     * Prompts for asking user's name
+     * Map of language code -> name prompt message
+     */
+    private Map<Say.Language, String> askName = new LinkedHashMap<>();
+
+    /**
+     * Prompts for asking user's account number
+     * Map of language code -> account prompt message
+     */
+    private Map<Say.Language, String> askAccount = new LinkedHashMap<>();
+
+    /**
+     * Template for confirming user details (problem description)
+     * Map of language code -> confirmation template
+     * Template should contain placeholders: %s for name, %s for account, %s for problem
+     */
+    private Map<Say.Language, String> confirmProblem = new LinkedHashMap<>();
+
+    /**
+     * Thank you messages when ending the call
+     * Map of language code -> thank you template
+     * Template should contain placeholder: %s for name
+     */
+    private Map<Say.Language, String> thankYou = new LinkedHashMap<>();
+
+    /**
+     * Retry messages when user needs to provide information again
+     * Map of language code -> retry message
+     */
+    private Map<Say.Language, String> retry = new LinkedHashMap<>();
+
+    /**
      * Validates that required languages are present in all language property maps.
      * @throws IllegalStateException if any required language is missing
      */
@@ -44,16 +76,6 @@ public class LanguageProperties {
     void validateRequiredLanguages() {
         if (required == null || required.isEmpty()) {
             return;
-        }
-
-        // Validate timeout (flat map: languageCode -> message)
-        var missingInTimeout = required.stream()
-                .filter(lang -> !timeout.containsKey(lang))
-                .toList();
-        if (!missingInTimeout.isEmpty()) {
-            throw new IllegalStateException(
-                    "Missing required languages " + missingInTimeout + " in app.languages.timeout"
-            );
         }
 
         // Validate selection (nested map: digit -> { languageCode -> message })
@@ -66,6 +88,34 @@ public class LanguageProperties {
         if (!missingInSelection.isEmpty()) {
             throw new IllegalStateException(
                     "Missing required languages " + missingInSelection + " in app.languages.selection"
+            );
+        }
+
+        validateMap("timeout", timeout);
+
+        // Validate askName
+        validateMap("askName", askName);
+
+        // Validate askAccount
+        validateMap("askAccount", askAccount);
+
+        // Validate confirmProblem
+        validateMap("confirmProblem", confirmProblem);
+
+        // Validate thankYou
+        validateMap("thankYou", thankYou);
+
+        // Validate retry
+        validateMap("retry", retry);
+    }
+
+    private void validateMap(String mapName, Map<Say.Language, String> map) {
+        var missing = required.stream()
+                .filter(lang -> !map.containsKey(lang))
+                .toList();
+        if (!missing.isEmpty()) {
+            throw new IllegalStateException(
+                    "Missing required languages " + missing + " in app.languages." + mapName
             );
         }
     }
