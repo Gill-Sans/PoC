@@ -20,7 +20,7 @@ public class AskProblemTool {
         String confirmationMessage = getConfirmationMessage(lang, data);
         String actionUrl = ACTION_URL + lang;
 
-        return twilioResponseBuilder.gatherXml(confirmationMessage, actionUrl, sayLanguage, true);
+        return twilioResponseBuilder.promptForUserInput(confirmationMessage, actionUrl, sayLanguage, true);
     }
 
     private String getConfirmationMessage(String lang, CallData data) {

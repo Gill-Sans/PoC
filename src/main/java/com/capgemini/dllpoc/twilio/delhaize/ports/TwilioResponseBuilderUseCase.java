@@ -4,8 +4,9 @@ import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Say;
 
 public interface TwilioResponseBuilderUseCase {
-    Say say(String text, Say.Language lang);
-    String gatherXml(String message, String actionUrl, Say.Language language, boolean useSpeech);
-    VoiceResponse sayAndHangup(String message, Say.Language lang);
-    VoiceResponse redirect(String url);
+    Say createSpeechElement(String text, Say.Language lang);
+    String promptForUserInput(String message, String actionUrl, Say.Language language, boolean useSpeech);
+    String buildLanguageSelectionPrompt(String actionUrl);
+    VoiceResponse endCallWithMessage(String message, Say.Language lang);
+    VoiceResponse continueToNextStep(String url);
 }

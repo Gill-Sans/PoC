@@ -41,7 +41,7 @@ public class HangupTool {
 
         String actionUrl = ACTION_URL + lang;
 
-        return twilioResponseBuilder.gatherXml(retryMessage, actionUrl, language, true);
+        return twilioResponseBuilder.promptForUserInput(retryMessage, actionUrl, language, true);
     }
 
 }

@@ -19,7 +19,7 @@ public class AskAccountTool {
         String actionUrl = ACTION_URL + language;
         Say.Language sayLanguage = ToolLanguageUtil.getSayLanguage(language);
 
-        return twilioResponseBuilder.gatherXml(message, actionUrl, sayLanguage, false);
+        return twilioResponseBuilder.promptForUserInput(message, actionUrl, sayLanguage, false);
     }
 
     private String getAccountPrompt(String language) {

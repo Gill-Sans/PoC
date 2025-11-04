@@ -31,3 +31,23 @@ cors:
   allowed-headers: ["*"]
   allowed-methods: ["*"]
   allowed-origins: ["*"]
+
+app:
+  languages:
+    required:
+      - nl-BE
+      - fr-BE
+    selection:
+      1:
+        en-US: "For English, press 1."
+      2:
+        nl-NL: "Voor Nederlands, druk op 2."
+      3:
+        fr-FR: "Pour le français, appuyez sur 3."
+      4:
+        de-DE: "Für Deutsch drücken Sie 4."
+    timeout:
+      en-US: "We did not receive your response. Goodbye!"
+      nl-NL: "We hebben uw antwoord niet ontvangen. Tot ziens!"
+      fr-FR: "Nous n'avons pas reçu votre réponse. Au revoir!"
+      de-DE: "Wir haben Ihre Antwort nicht erhalten. Auf Wiedersehen!"
