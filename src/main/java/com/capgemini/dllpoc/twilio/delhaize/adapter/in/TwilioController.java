@@ -44,8 +44,10 @@ public class TwilioController {
             sessionId = sessionService.createNewSession();
             xml = callFlowAgent.talkWithSession(sessionId, request.input());
         }
-        log.info(xml);
-        return ResponseEntity.ok(xml);
+        log.info("Twilio /process response XML BEFORE formatting: {}", xml);
+        String formattedXml = formatXML(xml);
+        log.info("Twilio /process response XML AFTER formatting: {}", formattedXml);
+        return ResponseEntity.ok(formattedXml);
     }
 
     @PostMapping(value = "/talk", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -68,5 +70,19 @@ public class TwilioController {
     public ResponseEntity<Void> clearSession(@PathVariable String sessionId) {
         callFlowAgent.clearConversation(sessionId);
         return ResponseEntity.ok().build();
+    }
+
+    private String formatXML(String xml) {
+        if (xml == null) {
+            return null;
+        }
+
+        // Remove ```xml at the start (with optional whitespace)
+        String result = xml.replaceFirst("(?s)^\\s*```xml\\s*", "");
+
+        // Remove ``` at the end (with optional whitespace)
+        result = result.replaceFirst("(?s)\\s*```\\s*$", "");
+
+        return result.trim();
     }
 }

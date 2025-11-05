@@ -15,6 +15,7 @@ spring:
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -53,20 +54,25 @@ app:
       nl-NL: "We hebben uw antwoord niet ontvangen. Tot ziens!"
       fr-FR: "Nous n'avons pas reçu votre réponse. Au revoir!"
       de-DE: "Wir haben Ihre Antwort nicht erhalten. Auf Wiedersehen!"
-    askName:
-      en-US: "Please say your name."
-      nl-NL: "Zeg alstublieft uw naam."
-      fr-FR: "Veuillez dire votre nom."
+    askStoreName:
+      en-US: "Please say your store name."
+      nl-NL: "Zeg alstublieft uw winkelnaam."
+      fr-FR: "Veuillez dire votre nom de magazin."
       de-DE: "Bitte sagen Sie Ihren Namen."
-    askAccount:
-      en-US: "Please enter your store account number, followed by the pound key."
-      nl-NL: "Voer uw winkelrekeningnummer in, gevolgd door een hekje."
-      fr-FR: "Veuillez entrer votre numéro de compte magasin, suivi de la touche dièse."
+    askStoreNumber:
+      en-US: "Please enter your store number, followed by the pound key."
+      nl-NL: "Voer uw winkelnummer in, gevolgd door een hekje."
+      fr-FR: "Veuillez entrer votre numéro de magasin, suivi de la touche dièse."
       de-DE: "Bitte geben Sie Ihre Kontonummer ein, gefolgt von der Rautetaste."
+    askProblem:
+      en-US: "Please describe your problem."
+      nl-NL: "Beschrijf alstublieft uw probleem."
+      fr-FR: "Veuillez décrire votre problème."
+      de-DE: "Bitte beschreiben Sie Ihr Problem."
     confirmProblem:
-      en-US: "You said your name is %s, your account number is %s, and your problem is: %s. Is that correct? Please say yes or no."
-      nl-NL: "U heeft gezegd dat uw naam %s is, uw rekeningnummer is %s, en uw probleem is: %s. Klopt dat? Zeg alstublieft ja of nee."
-      fr-FR: "Vous avez dit que votre nom est %s, votre numéro de compte est %s, et votre problème est: %s. Est-ce correct? Veuillez dire oui ou non."
+      en-US: "You said your name is %s, your store number is %s, and your problem is: %s. Is that correct? Please say yes or no."
+      nl-NL: "U heeft gezegd dat uw naam %s is, uw winkelnummer is %s, en uw probleem is: %s. Klopt dat? Zeg alstublieft ja of nee."
+      fr-FR: "Vous avez dit que votre nom est %s, votre numéro de magazin est %s, et votre problème est: %s. Est-ce correct? Veuillez dire oui ou non."
       de-DE: "Sie haben gesagt, Ihr Name ist %s, Ihre Kontonummer ist %s, und Ihr Problem ist: %s. Ist das korrekt? Bitte sagen Sie ja oder nein."
     thankYou:
       en-US: "Thank you %s."

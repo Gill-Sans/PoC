@@ -56,12 +56,12 @@ public class SessionService {
         return sessionData != null ? sessionData.getLanguage() : null;
     }
 
-    public void setAccountNumber(String sessionId, String accountNumber) {
-        getSessionData(sessionId).setAccountNumber(accountNumber);
+    public void setStoreNumber(String sessionId, String storeNumber) {
+        getSessionData(sessionId).setStoreNumber(storeNumber);
     }
 
-    public String getAccountNumber(String sessionId) {
+    public String getStoreNumber(String sessionId) {
         SessionData sessionData = sessionDataMap.get(sessionId);
-        return sessionData != null ? sessionData.getAccountNumber() : null;
+        return sessionData != null ? sessionData.getStoreNumber() : null;
     }
 }

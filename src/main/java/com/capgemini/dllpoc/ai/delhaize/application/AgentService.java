@@ -28,9 +28,10 @@ public class AgentService {
     private List<Object> createTools(TwilioResponseBuilder twilioResponseBuilder, LanguageProperties languageProperties) {
         return List.of(
                 new AskLanguageTool(twilioResponseBuilder),
-                new AskAccountTool(twilioResponseBuilder, languageProperties),
-                new AskNameTool(twilioResponseBuilder, languageProperties),
+                new AskStoreNumberTool(twilioResponseBuilder, languageProperties),
+                new AskStoreNameTool(twilioResponseBuilder, languageProperties),
                 new AskProblemTool(twilioResponseBuilder, languageProperties),
+                new ConfirmProblemTool(twilioResponseBuilder, languageProperties),
                 new TranscriptionTool(),
                 new HangupTool(twilioResponseBuilder, languageProperties)
         );
@@ -84,11 +85,12 @@ public class AgentService {
 
             Follow this conversation flow:
             1. First interaction: call askLanguage() to let user select language
-            2. After language selected: call askName(language) to get customer name
-            3. After name provided: call askAccount(language) to get account number
-            4. After account number provided: call askProblem(language) to ask the customer to describe their problem
-            5. After collecting all information, call thanksTool(language) to finalize the call
-            6. If the customer's problem cannot be resolved, call redirectToHumanAgentTool(language) to transfer to a human agent
+            2. After language selected: call askStoreName(language) to get store name
+            3. After name provided: call askStoreNumber(language) to get store number
+            4. After store number provided: call askProblem(language) to ask the customer to describe their problem
+            5. After collecting all information, call confirmProblem(language) to confirm the details with the customer
+            6. After collecting all information, call hangupTool(language) to finalize the call
+            
 
             Always use the conversation history to understand the current state.
             If a customer has already provided information, don't ask for it again.

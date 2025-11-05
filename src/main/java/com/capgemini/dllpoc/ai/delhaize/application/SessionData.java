@@ -9,5 +9,5 @@ import lombok.Setter;
 public class SessionData {
 
     private Say.Language language;
-    private String accountNumber;
+    private String storeNumber;
 }

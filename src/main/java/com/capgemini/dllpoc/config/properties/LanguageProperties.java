@@ -40,13 +40,19 @@ public class LanguageProperties {
      * Prompts for asking user's name
      * Map of language code -> name prompt message
      */
-    private Map<Say.Language, String> askName = new LinkedHashMap<>();
+    private Map<Say.Language, String> askStoreName = new LinkedHashMap<>();
 
     /**
      * Prompts for asking user's account number
      * Map of language code -> account prompt message
      */
-    private Map<Say.Language, String> askAccount = new LinkedHashMap<>();
+    private Map<Say.Language, String> askStoreNumber = new LinkedHashMap<>();
+
+    /**
+     * Template for asking user to describe their problem
+     * Map of language code -> problem description prompt template
+     */
+    private Map<Say.Language, String> askProblem = new LinkedHashMap<>();
 
     /**
      * Template for confirming user details (problem description)
@@ -94,10 +100,10 @@ public class LanguageProperties {
         validateMap("timeout", timeout);
 
         // Validate askName
-        validateMap("askName", askName);
+        validateMap("askName", askStoreName);
 
         // Validate askAccount
-        validateMap("askAccount", askAccount);
+        validateMap("askAccount", askStoreNumber);
 
         // Validate confirmProblem
         validateMap("confirmProblem", confirmProblem);
