@@ -3,6 +3,7 @@ package com.capgemini.dllpoc.twilio.delhaize.adapter.in;
 import com.capgemini.dllpoc.ai.delhaize.application.CallFlowAgent;
 import com.capgemini.dllpoc.ai.delhaize.application.SessionService;
 import com.capgemini.dllpoc.twilio.delhaize.adapter.in.dto.TalkRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/twilio")
 @CrossOrigin
+@Slf4j
 public class TwilioController {
 
     private final CallFlowAgent callFlowAgent;
@@ -23,8 +25,26 @@ public class TwilioController {
     }
 
     @PostMapping(value = "/process", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> handleIncomingCall(@RequestParam Map<String, String> params) {
-        String xml = callFlowAgent.process(params);
+    public ResponseEntity<String> talk(@RequestParam Map<String, String> params) {
+        String xml;
+
+        String input = params.getOrDefault("SpeechResult", params.get("Digits"));
+        if (input == null) {
+            input = "Hey";
+        }
+        String sessionId = params.get("CallSid");
+        TalkRequest request = new TalkRequest(input, sessionId);
+        System.out.println(request.input() + " " + request.sessionId());
+
+        if (sessionId != null && !sessionId.trim().isEmpty()) {
+            // Use an existing session
+            xml = callFlowAgent.talkWithSession(request.sessionId(), request.input());
+        } else {
+            // Create a new session for this conversation
+            sessionId = sessionService.createNewSession();
+            xml = callFlowAgent.talkWithSession(sessionId, request.input());
+        }
+        log.info(xml);
         return ResponseEntity.ok(xml);
     }
 

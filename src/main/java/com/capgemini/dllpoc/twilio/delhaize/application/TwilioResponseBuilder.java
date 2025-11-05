@@ -49,12 +49,11 @@ public class TwilioResponseBuilder implements TwilioResponseBuilderUseCase {
 
     private String buildUserInputPromptXml(String message, String actionUrl, Say.Language language, boolean useSpeech, String timeoutMessage) {
         String inputType = useSpeech ? "speech" : "dtmf";
-        String speechTimeout = useSpeech ? "speechTimeout=\"20\"" : "";
+        String speechTimeout = useSpeech ? "speechTimeout=\"2\"" : "";
         String promptTimeout = " timeout=\"20\"";
 
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<Response>\n" +
-                "  <Gather speechModel=\"googlev2_telephony\" input=\"" + inputType + "\"" + speechTimeout + promptTimeout + " method=\"POST\" action=\"" + actionUrl + "\">\n" +
+        return  "<Response>\n" +
+                "  <Gather speechModel=\"googlev2_telephony\" input=\"" + inputType + "\" " + speechTimeout + " method=\"POST\" action=\"" + actionUrl + "\">\n" +
                 "    <Say language=\"" + language + "\">" + message + "</Say>\n" +
                 "  </Gather>\n" +
                 "  <Say language=\"" + language + "\">" + timeoutMessage + "</Say>\n" +

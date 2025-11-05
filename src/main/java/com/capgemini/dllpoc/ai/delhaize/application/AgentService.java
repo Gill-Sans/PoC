@@ -74,6 +74,13 @@ public class AgentService {
             Do not add any text before or after the tool result.
             Do not explain what you did.
             Just return the raw XML from the tool.
+            
+            DO NOT add quotes to the XML but format it with appropriate indentation.
+            DO NOT change the answer from the tool.
+            
+            Do not alter the response content in any way. Preserve the exact structure and data as returned by the tool.
+            Do not enclose the response in quotes. Ensure the output is returned as raw XML without surrounding quotation marks.
+            Format the XML with appropriate indentation to improve readability, while maintaining the original semantics and structure.
 
             Follow this conversation flow:
             1. First interaction: call askLanguage() to let user select language

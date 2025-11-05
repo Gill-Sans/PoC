@@ -1,5 +1,6 @@
 package com.capgemini.dllpoc.ai.delhaize.application;
 
+import com.twilio.twiml.voice.Say;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionService {
 
     private final Map<String, String> phoneToSessionMap = new ConcurrentHashMap<>();
+    private final Map<String, SessionData> sessionDataMap = new ConcurrentHashMap<>();
 
     /**
      * Get or create a session ID for a given phone number/caller identifier
@@ -30,6 +32,8 @@ public class SessionService {
      */
     public void clearSession(String callSid) {
         phoneToSessionMap.remove(callSid);
+        String sessionId = phoneToSessionMap.get(callSid);
+        sessionDataMap.remove(sessionId);
     }
 
     /**
@@ -37,5 +41,27 @@ public class SessionService {
      */
     public String createNewSession() {
         return UUID.randomUUID().toString();
+    }
+
+    public SessionData getSessionData(String sessionId) {
+        return sessionDataMap.computeIfAbsent(sessionId, k -> new SessionData());
+    }
+
+    public void setLanguage(String sessionId, Say.Language language) {
+        getSessionData(sessionId).setLanguage(language);
+    }
+
+    public Say.Language getLanguage(String sessionId) {
+        SessionData sessionData = sessionDataMap.get(sessionId);
+        return sessionData != null ? sessionData.getLanguage() : null;
+    }
+
+    public void setAccountNumber(String sessionId, String accountNumber) {
+        getSessionData(sessionId).setAccountNumber(accountNumber);
+    }
+
+    public String getAccountNumber(String sessionId) {
+        SessionData sessionData = sessionDataMap.get(sessionId);
+        return sessionData != null ? sessionData.getAccountNumber() : null;
     }
 }

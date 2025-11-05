@@ -27,11 +27,12 @@ If `.env.example` is not present, create a file named `.env` in the project root
   - `DATASOURCE_URL` - JDBC URL for PostgreSQL (e.g. `jdbc:postgresql://localhost:5432/dllpoc`).
   - `DATASOURCE_USERNAME` - DB username
   - `DATASOURCE_PASSWORD` - DB password
-  - `TWILIO_ACCOUNT_SID`
-  - `TWILIO_API_KEY`
-  - `TWILIO_API_SECRET`
-  - `TWILIO_APP_SID`
-  - `AZURE_OPENAI_API_KEY`
+  - `TWILIO_ACCOUNT_SID`- Twilio Account SID
+  - `TWILIO_API_KEY`- Twilio API key
+  - `TWILIO_API_SECRET`- Twilio API secret
+  - `TWILIO_APP_SID`- Twilio Application SID
+  - `AZURE_OPENAI_API_KEY`- API key for Azure OpenAI
+  - `AZURE_OPENAI_DEPLOYMENT_NAME` - Name of the deployed model in Azure OpenAI (e.g. `gpt-4o`)
   - `APP_BASE_URL` - Base URL where the application will be hosted (e.g. `https://your-app-base-url.com`)
 
 #### Sample `.env` / `.env.example`
@@ -46,6 +47,7 @@ TWILIO_API_KEY=SKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_API_SECRET=your_twilio_api_secret
 TWILIO_APP_SID=APxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 AZURE_OPENAI_API_KEY=5dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
 APP_BASE_URL=https://your-app-base-url.com
 ```
 

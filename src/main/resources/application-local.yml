@@ -7,7 +7,9 @@ spring:
         endpoint: https://premi0576824.openai.azure.com/
         api-key: ${AZURE_OPENAI_API_KEY}
         chat:
-          deployment-name: gpt-5
+          options:
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME}
+            temperature: 0.1
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
