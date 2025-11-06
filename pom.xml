@@ -7,7 +7,8 @@
         <java.version>21</java.version>
         <spring-boot.version>3.5.7</spring-boot.version>
         <liquibase.version>5.0.1</liquibase.version>
-        <postgresql.version>42.7.8</postgresql.version>
+        <spring-cloud-azure.version>6.0.0</spring-cloud-azure.version>
+        <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
         <lombok.version>1.18.42</lombok.version>
         <twilio.version>11.0.1</twilio.version>
         <h2.version>2.4.240</h2.version>
@@ -39,6 +40,20 @@
 		<tag/>
 		<url/>
 	</scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud Azure BOM -->
+            <dependency>
+                <groupId>com.azure.spring</groupId>
+                <artifactId>spring-cloud-azure-dependencies</artifactId>
+                <version>${spring-cloud-azure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,9 +81,14 @@
             <version>${liquibase.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${mssql-jdbc.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

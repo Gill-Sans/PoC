@@ -7,7 +7,7 @@ This repository uses Spring Boot with Liquibase for database migrations and Twil
 ## Checklist (what you'll do to run the project locally)
 
 - Create a `.env` file from the provided example and fill in credentials.
-- Create a PostgreSQL database named `dllpoc` (see Database setup below).
+- Create a MSsql database named `dllpoc` (see Database setup below).
 - Set the active Spring profile (e.g. `local`, `dev` or `prod`).
 - Run the application using the included Maven wrapper or from your IDE.
 
@@ -24,7 +24,7 @@ If `.env.example` is not present, create a file named `.env` in the project root
 
 #### Required environment variables
 
-  - `DATASOURCE_URL` - JDBC URL for PostgreSQL (e.g. `jdbc:postgresql://localhost:5432/dllpoc`).
+  - `DATASOURCE_URL` - JDBC URL.
   - `DATASOURCE_USERNAME` - DB username
   - `DATASOURCE_PASSWORD` - DB password
   - `TWILIO_ACCOUNT_SID`
@@ -35,7 +35,7 @@ If `.env.example` is not present, create a file named `.env` in the project root
 #### Sample `.env` / `.env.example`
 
 ```dotenv
-DATASOURCE_URL=jdbc:postgresql://localhost:5432/dllpoc
+DATASOURCE_URL=jdbc:sqlserver://localhost:1433;databaseName=dll-callcenter;encrypt=true;trustServerCertificate=true
 DATASOURCE_USERNAME=dllpoc_user
 DATASOURCE_PASSWORD=change_me
 
@@ -45,15 +45,32 @@ TWILIO_API_SECRET=your_twilio_api_secret
 TWILIO_APP_SID=APxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### 2) Database setup
+---
+### 2) Database setup (Microsoft SQL Server)
 
-We keep detailed database setup instructions on [Confluence](https://e-3d-dc1.capgemini.com/confluence/display/DC0514/03+-+Local+development+Databases). Follow the internal guide for setting up PostgreSQL and users, then create the database:
+We keep detailed database setup instructions on [Confluence](https://e-3d-dc1.capgemini.com/confluence/display/DC0514/03+-+Local+development+Databases). Follow the internal guide for setting up Microsoft SQL Server and users.
+You could also start a container with docker or podman by running:
 
-Create a PostgreSQL database named `dllpoc`. The project uses Liquibase to apply migrations automatically (on application startup).
+```shell
+docker compose -f compose.local.yml up -d
+```
+
+---
+> **⚠️ IMPORTANT:** Don't forget this step
+
+Create an MSSQL database named `dll-callcenter`. The project uses Liquibase to apply migrations automatically (on application startup).
+
+---
+**Connection string example:**
+```
+jdbc:sqlserver://localhost:1433;databaseName=dll-callcenter;encrypt=true;trustServerCertificate=true
+```
+
+---
 
 ### 3) Set the active Spring profile
 
-The app provides `application-local.yml`, `application-dev.yml`, and `application-prod.yml`. Choose one of: `local`, `dev`, or `prod`.
+The app provides `application-local.yml` and `application-dev.yml`. Choose one of: `local` or `dev`.
 
 You can set the active profile in several ways:
 - Via VM options in your IDE run configuration:
@@ -74,6 +91,7 @@ mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local
 mvnw.cmd spring-boot:run -Dspring.profiles.active=local
 ```
 
+---
 ### 4) Run the application
 
 Run `com.capgemini.dllpoc.DllpocApplication` from your IDE with the `local` profile active.
