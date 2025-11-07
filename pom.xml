@@ -11,6 +11,7 @@
         <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
         <lombok.version>1.18.42</lombok.version>
         <twilio.version>11.0.1</twilio.version>
+        <spring-ai.version>1.0.3</spring-ai.version>
         <h2.version>2.4.240</h2.version>
     </properties>
 
@@ -18,7 +19,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 
 	<groupId>com.capgemini</groupId>
@@ -53,6 +54,18 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 	<dependencies>
 		<dependency>
@@ -100,6 +113,16 @@
             <groupId>com.twilio.sdk</groupId>
             <artifactId>twilio</artifactId>
             <version>${twilio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-azure-openai</artifactId>
+            <version>${spring-ai.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-client-chat</artifactId>
+            <version>${spring-ai.version}</version>
         </dependency>
 
         <dependency>
